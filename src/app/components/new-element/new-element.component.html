@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>Elemento</h2>
+
+<mat-dialog-content [formGroup]="form">
+
+  <mat-form-field class="example-full-width">
+    <input mat-Input
+           placeholder="Number of elemenn"
+           formControlName="number">
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <input mat-Input
+           placeholder="Name of element"
+           formControlName="name">
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <input mat-Input
+           placeholder="Atomic weight"
+           formControlName="weight">
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <input mat-Input
+           placeholder="Symbol"
+           formControlName="symbol">
+  </mat-form-field>
+
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="mat-raised-button">Close</button>
+  <button class="mat-raised-button mat-primary">Save</button>
+</mat-dialog-actions>
+
+

@@ -7,6 +7,7 @@ import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
 import {ConfirmationDialogComponent} from '../confirmation-dialog/confirmation-dialog.component';
 import {AlertDialogComponent} from '../alertdialog/alertdialog.component';
+import {NewElementComponent} from '../new-element/new-element.component';
 
 
 export interface PeriodicElement {
@@ -78,6 +79,40 @@ export class BodyComponent implements OnInit {
   onNoClick(): void {
   }
 
+
+
+  openDialogNewElement() {
+    const dialogRef = this.dialog.open(NewElementComponent, {
+      data: {
+        title: 'Elemento',
+      },
+    });
+    /*const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        message: 'Are you sure want to delete?',
+        buttonText: {
+          ok: 'Save',
+          cancel: 'No'
+        }
+      }
+    });*/
+    //const snack = this.snackBar.open('Snack bar open before dialog');
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        //const filteredItems = this.dataSource.data.filter(item => item !== element);
+        //this.dataSource.data = filteredItems;
+        //snack.dismiss();
+        const a = document.createElement('a');
+        a.click();
+        a.remove();
+        //snack.dismiss();
+        /*this.snackBar.open('Closing snack bar in a few seconds', 'Fechar', {
+          duration: 2000,
+        });*/
+      }
+    });
+  }
 
   openDialog(element) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
