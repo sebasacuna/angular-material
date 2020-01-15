@@ -27,6 +27,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
   {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
   {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
   {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
+  {position: 11, name: 'Argon', weight: 20.1797, symbol: 'Arg'},
 ];
 
 
@@ -78,8 +79,7 @@ export class BodyComponent implements OnInit {
   }
 
 
-  openDialog() {
-
+  openDialog(element) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         message: 'Are you sure want to delete?',
@@ -102,6 +102,8 @@ export class BodyComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
+        const filteredItems = this.dataSource.data.filter(item => item !== element);
+        this.dataSource.data = filteredItems;
         //snack.dismiss();
         const a = document.createElement('a');
         a.click();
@@ -123,5 +125,12 @@ export class BodyComponent implements OnInit {
         }
       },
     });
+  }
+
+  getTotalRows() {
+    //console.log('data');
+    //console.log(this.paginator.length);
+    //console.log(this.paginator.pageSize);
+    return this.dataSource.data.length;
   }
 }
