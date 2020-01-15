@@ -79,7 +79,17 @@ export class BodyComponent implements OnInit {
 
 
   openDialog() {
+
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        message: 'Are you sure want to delete?',
+          buttonText: {
+          ok: 'Save',
+            cancel: 'No'
+        }
+      }
+    });
+    /*const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         message: 'Are you sure want to delete?',
         buttonText: {
@@ -87,7 +97,7 @@ export class BodyComponent implements OnInit {
           cancel: 'No'
         }
       }
-    });
+    });*/
     //const snack = this.snackBar.open('Snack bar open before dialog');
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
