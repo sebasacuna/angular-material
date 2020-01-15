@@ -10,13 +10,17 @@ import {HeaderComponent} from './components/header/header.component';
 import {FooterComponent} from './components/footer/footer.component';
 import {BodyComponent} from './components/body/body.component';
 import {MaterialModule} from './modules/material/material.module';
+import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
+import {AlertDialogComponent} from './components/alertdialog/alertdialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    BodyComponent
+    BodyComponent,
+    ConfirmationDialogComponent,
+    AlertDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +29,8 @@ import {MaterialModule} from './modules/material/material.module';
     MaterialModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ConfirmationDialogComponent, AlertDialogComponent],
 })
 export class AppModule {
 }

@@ -2,8 +2,12 @@ import {Component, OnInit, ViewChild, Inject} from '@angular/core';
 
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material/table';
+import {VERSION, MatDialogRef, MatDialog, MatSnackBar, MAT_DIALOG_DATA} from '@angular/material';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
+import {ConfirmationDialogComponent} from '../confirmation-dialog/confirmation-dialog.component';
+import {AlertDialogComponent} from '../alertdialog/alertdialog.component';
+
 
 export interface PeriodicElement {
   name: string;
@@ -42,9 +46,7 @@ export class BodyComponent implements OnInit {
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    console.log(numSelected);
     const numRows = this.dataSource.data.length;
-    console.log(numRows);
     return numSelected === numRows;
   }
 
@@ -63,7 +65,8 @@ export class BodyComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
 
-  constructor() {
+  constructor(private dialog: MatDialog,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -74,4 +77,41 @@ export class BodyComponent implements OnInit {
   onNoClick(): void {
   }
 
+
+  openDialog() {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        message: 'Are you sure want to delete?',
+        buttonText: {
+          ok: 'Save',
+          cancel: 'No'
+        }
+      }
+    });
+    //const snack = this.snackBar.open('Snack bar open before dialog');
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        //snack.dismiss();
+        const a = document.createElement('a');
+        a.click();
+        a.remove();
+        //snack.dismiss();
+        /*this.snackBar.open('Closing snack bar in a few seconds', 'Fechar', {
+          duration: 2000,
+        });*/
+      }
+    });
+  }
+
+  openAlertDialog() {
+    const dialogRef = this.dialog.open(AlertDialogComponent, {
+      data: {
+        message: 'HelloWorld',
+        buttonText: {
+          cancel: 'Done'
+        }
+      },
+    });
+  }
 }
