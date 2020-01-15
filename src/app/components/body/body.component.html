@@ -1,6 +1,5 @@
 <div class="body-container">
-
-  <h4>Table Mantainer</h4>
+  <button mat-raised-button class="spaces-button mat-elevation-z8">Create Element</button>
   <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
     <ng-container matColumnDef="select">
@@ -52,7 +51,7 @@
 
     <!-- Edit Button-->
     <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> Action </th>
+      <th mat-header-cell *matHeaderCellDef> Action</th>
       <td mat-cell *matCellDef="let element">
         <button mat-icon-button matTooltip="Click to Edit" class="iconbutton" color="primary">
           <mat-icon aria-label="Edit">edit</mat-icon>

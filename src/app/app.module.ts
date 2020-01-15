@@ -1,7 +1,7 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
+import {AppRoutingModule} from './app-routing.module';
 
 import {A11yModule} from '@angular/cdk/a11y';
 import {DragDropModule} from '@angular/cdk/drag-drop';
@@ -44,25 +44,25 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTreeModule} from '@angular/material/tree';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import { AppComponent } from './app.component';
-import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { BodyComponent } from './components/body/body.component';
+import {AppComponent} from './app.component';
+import {HeaderComponent} from './components/header/header.component';
+import {FooterComponent} from './components/footer/footer.component';
+import {BodyComponent, DialogOverviewExample} from './components/body/body.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-	HeaderComponent,
-	FooterComponent,
-	BodyComponent
+    HeaderComponent,
+    FooterComponent,
+    BodyComponent
   ],
   imports: [
-	BrowserModule,
-	BrowserAnimationsModule,
-	AppRoutingModule,
-	A11yModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    A11yModule,
     CdkStepperModule,
     CdkTableModule,
     CdkTreeModule,
@@ -108,4 +108,5 @@ import { BodyComponent } from './components/body/body.component';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
