@@ -84,10 +84,11 @@ export class BodyComponent implements OnInit {
       data: {
         message: 'Are you sure want to delete?',
           buttonText: {
-          ok: 'Save',
-            cancel: 'No'
+          ok: 'Delete',
+            cancel: 'Cancel'
         }
-      }
+      },
+      panelClass: 'my-panel'
     });
     /*const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
