@@ -8,6 +8,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {ConfirmationDialogComponent} from '../confirmation-dialog/confirmation-dialog.component';
 import {AlertDialogComponent} from '../alertdialog/alertdialog.component';
 import {NewElementComponent} from '../new-element/new-element.component';
+import { EditElementComponent } from '../edit-element/edit-element.component';
 
 
 export interface PeriodicElement {
@@ -79,6 +80,15 @@ export class BodyComponent implements OnInit {
   onNoClick(): void {
   }
 
+  openEditDialog(element){
+    const dialogRef = this.dialog.open(EditElementComponent, {
+      data: {
+        title: 'Elemento',
+        data: element
+      },
+      panelClass: 'my-class'
+    });
+  }
 
 
   openDialogNewElement() {
@@ -86,6 +96,7 @@ export class BodyComponent implements OnInit {
       data: {
         title: 'Elemento',
       },
+      panelClass: 'my-class'
     });
     /*const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {

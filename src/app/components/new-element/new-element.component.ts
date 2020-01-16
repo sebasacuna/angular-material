@@ -12,32 +12,24 @@ export class NewElementComponent implements OnInit {
   title = 'Elemento';
   containerdialog = 'container-dialog'
 
-
-  form: FormGroup;
+  private form: FormGroup;
 
   constructor(@Inject(MAT_DIALOG_DATA) private data: any,
-              fb: FormBuilder,
+              private fb: FormBuilder,
               private dialogRef: MatDialogRef<NewElementComponent>) {
     if (data) {
       this.title = 'Elemento';
     }
-    this.form = fb.group({
-      number: '',
-      name: '',
-      weight: '',
-      symbol: ''
-  });
-  
-    //this.createForm();
+   this.createForm();
 
   }
 
   createForm() {
-    this.aForm = this.aformb.group({
-      number: [''],
-      name: [''],
-      weight: [''],
-      symbol: ['']
+    this.form = this.fb.group({
+      number: '',
+      name: '',
+      weight: '',
+      symbol: ''
     });
   }
 
