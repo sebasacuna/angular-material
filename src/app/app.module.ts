@@ -14,6 +14,7 @@ import {ConfirmationDialogComponent} from './components/confirmation-dialog/conf
 import {AlertDialogComponent} from './components/alertdialog/alertdialog.component';
 import { NewElementComponent } from './components/new-element/new-element.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import { EditElementComponent } from './components/edit-element/edit-element.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import {ReactiveFormsModule} from '@angular/forms';
     BodyComponent,
     ConfirmationDialogComponent,
     AlertDialogComponent,
-    NewElementComponent
+	NewElementComponent,
+	EditElementComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +36,7 @@ import {ReactiveFormsModule} from '@angular/forms';
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [ConfirmationDialogComponent, AlertDialogComponent, NewElementComponent],
+  entryComponents: [ConfirmationDialogComponent, AlertDialogComponent, NewElementComponent, EditElementComponent],
 })
 export class AppModule {
 }

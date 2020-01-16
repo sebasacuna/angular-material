@@ -12,10 +12,10 @@ export class NewElementComponent implements OnInit {
   title = 'Elemento';
   containerdialog = 'container-dialog'
 
-  private form: FormGroup;
+  public form: FormGroup;
 
   constructor(@Inject(MAT_DIALOG_DATA) private data: any,
-              private fb: FormBuilder,
+  			  public fb: FormBuilder,
               private dialogRef: MatDialogRef<NewElementComponent>) {
     if (data) {
       this.title = 'Elemento';
@@ -31,6 +31,11 @@ export class NewElementComponent implements OnInit {
       weight: '',
       symbol: ''
     });
+  }
+
+  close() {
+	  console.log('close my friend');
+	  this.dialogRef.close();
   }
 
   ngOnInit() {
