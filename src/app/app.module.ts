@@ -12,9 +12,9 @@ import {BodyComponent} from './components/body/body.component';
 import {MaterialModule} from './modules/material/material.module';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
 import {AlertDialogComponent} from './components/alertdialog/alertdialog.component';
-import { NewElementComponent } from './components/new-element/new-element.component';
+import {NewElementComponent} from './components/new-element/new-element.component';
 import {ReactiveFormsModule} from '@angular/forms';
-import { EditElementComponent } from './components/edit-element/edit-element.component';
+import {EditElementComponent} from './components/edit-element/edit-element.component';
 
 @NgModule({
   declarations: [
@@ -24,8 +24,8 @@ import { EditElementComponent } from './components/edit-element/edit-element.com
     BodyComponent,
     ConfirmationDialogComponent,
     AlertDialogComponent,
-	NewElementComponent,
-	EditElementComponent
+    NewElementComponent,
+    EditElementComponent
   ],
   imports: [
     BrowserModule,
