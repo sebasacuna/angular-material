@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {FormBuilder} from '@angular/forms';
+import { FormGroup, FormBuilder,FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-new-element',
@@ -10,14 +10,35 @@ import {FormBuilder} from '@angular/forms';
 export class NewElementComponent implements OnInit {
 
   title = 'Elemento';
+  containerdialog = 'container-dialog'
+
+
+  form: FormGroup;
 
   constructor(@Inject(MAT_DIALOG_DATA) private data: any,
-              private fb: FormBuilder,
+              fb: FormBuilder,
               private dialogRef: MatDialogRef<NewElementComponent>) {
     if (data) {
       this.title = 'Elemento';
     }
+    this.form = fb.group({
+      number: '',
+      name: '',
+      weight: '',
+      symbol: ''
+  });
+  
+    //this.createForm();
 
+  }
+
+  createForm() {
+    this.aForm = this.aformb.group({
+      number: [''],
+      name: [''],
+      weight: [''],
+      symbol: ['']
+    });
   }
 
   ngOnInit() {

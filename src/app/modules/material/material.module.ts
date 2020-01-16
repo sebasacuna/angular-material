@@ -20,8 +20,8 @@ import {
   MatExpansionModule,
   MatGridListModule,
   MatIconModule,
-  MatInputModule,
   MatListModule,
+  MatFormFieldModule,
   MatMenuModule,
   MatNativeDateModule,
   MatPaginatorModule,
@@ -36,6 +36,8 @@ import {
 } from '@angular/material';
 import {PortalModule} from '@angular/cdk/portal';
 import {ScrollingModule} from '@angular/cdk/scrolling';
+
+import {MatInputModule} from '@angular/material/input';
 
 
 @NgModule({
@@ -61,6 +63,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
     MatDividerModule,
     MatExpansionModule,
     MatGridListModule,
+    MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatListModule,
@@ -104,6 +107,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
     MatDialogModule,
     MatDividerModule,
     MatExpansionModule,
+    MatFormFieldModule,
     MatGridListModule,
     MatIconModule,
     MatInputModule,

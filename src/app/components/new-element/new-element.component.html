@@ -1,37 +1,40 @@
-<h2 mat-dialog-title>Elemento</h2>
+<h2 mat-dialog-title [ngStyle]="{'margin-left':'6px'}">Element</h2>
 
-<mat-dialog-content [formGroup]="form">
+<mat-dialog-content [formGroup]="form" class="container-element">
 
   <mat-form-field class="example-full-width">
-    <input mat-Input
-           placeholder="Number of elemenn"
-           formControlName="number">
+    <input matInput 
+           type ="text"
+           placeholder="Number of element"
+           formControlName="number" value="Sushi">
   </mat-form-field>
 
   <mat-form-field class="example-full-width">
-    <input mat-Input
+    <input matInput 
+    type ="text"
            placeholder="Name of element"
            formControlName="name">
   </mat-form-field>
 
   <mat-form-field class="example-full-width">
-    <input mat-Input
+    <input matInput 
+    type ="text"
            placeholder="Atomic weight"
            formControlName="weight">
   </mat-form-field>
 
   <mat-form-field class="example-full-width">
-    <input mat-Input
+    <input matInput 
+    type ="text"  
            placeholder="Symbol"
            formControlName="symbol">
   </mat-form-field>
 
-
 </mat-dialog-content>
 
-<mat-dialog-actions>
-  <button class="mat-raised-button">Close</button>
-  <button class="mat-raised-button mat-primary">Save</button>
+<mat-dialog-actions class="container-button">
+  <button [ngStyle]="{'width':'130px','margin-right':'10px'}" class="mat-raised-button mat-primary">Save</button>
+  <button [ngStyle]="{'width':'130px'}" class="mat-raised-button">Close</button>
 </mat-dialog-actions>
 
 
