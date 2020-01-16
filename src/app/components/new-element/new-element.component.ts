@@ -34,7 +34,6 @@ export class NewElementComponent implements OnInit {
   }
 
   close() {
-	  console.log('close my friend');
 	  this.dialogRef.close();
   }
 
