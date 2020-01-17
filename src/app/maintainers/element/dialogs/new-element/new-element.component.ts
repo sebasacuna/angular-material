@@ -28,10 +28,10 @@ export class NewElementComponent implements OnInit {
 
   createForm() {
     this.form = this.fb.group({
-      number: ['', Validators.required],
-      name: ['', Validators.required],
-      weight: ['', Validators.required],
-      symbol: ['', Validators.required]
+      number: new FormControl('', [Validators.required]),
+      name: new FormControl('', [Validators.required]),
+      weight: new FormControl( '', [Validators.required]),
+      symbol: new FormControl( '', [Validators.required])
     });
   }
 
