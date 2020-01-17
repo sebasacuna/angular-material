@@ -79,13 +79,37 @@ export class ElementMantainerComponent implements OnInit {
   onNoClick(): void {
   }
 
-  openEditDialog(element) {
+  openEditDialog(element, index) {
     const dialogRef = this.dialog.open(EditElementComponent, {
       data: {
         title: 'Elemento',
-        data: element
+        data: element,
+        indexRow: index
       },
       panelClass: 'my-class'
+    });
+
+    dialogRef.afterClosed().subscribe((bar: PeriodicElement) => {
+      if (bar != null) {
+        this.dataSource.data.push(bar);
+        const newData = this.dataSource.data;
+        //this.dataSource._renderChangesSubscription;
+        console.log(bar);
+
+
+        const filteredItems = this.dataSource.data.filter(item => item !== element);
+        this.dataSource = new MatTableDataSource<PeriodicElement>(newData);
+        //this.dataSource.data = filteredItems;
+        //snack.dismiss();
+        const a = document.createElement('a');
+        a.click();
+        a.remove();
+
+        //snack.dismiss();
+        /*this.snackBar.open('Closing snack bar in a few seconds', 'Fechar', {
+          duration: 2000,
+        });*/
+      }
     });
   }
 
@@ -108,6 +132,7 @@ export class ElementMantainerComponent implements OnInit {
       }
     });*/
     //const snack = this.snackBar.open('Snack bar open before dialog');
+
 
     dialogRef.afterClosed().subscribe((bar: PeriodicElement) => {
       if (bar != null) {

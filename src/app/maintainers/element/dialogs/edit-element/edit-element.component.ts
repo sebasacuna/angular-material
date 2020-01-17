@@ -11,7 +11,8 @@ import { NewElementComponent } from '../new-element/new-element.component';
 export class EditElementComponent implements OnInit {
 
   title = 'Elemento';
-  containerdialog = 'container-dialog'
+  containerdialog = 'container-dialog';
+  index;
 
   public formedit: FormGroup;
 
@@ -20,6 +21,8 @@ export class EditElementComponent implements OnInit {
               private dialogRef: MatDialogRef<NewElementComponent>) {
     if (data) {
       this.title = 'Elemento';
+      this.index = data.indexRow;
+      console.log('index is ', this.index);
     }
    this.createForm(data.data);
 
