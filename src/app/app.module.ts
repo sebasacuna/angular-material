@@ -6,24 +6,26 @@ import {AppRoutingModule} from './app-routing.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {AppComponent} from './app.component';
-import {HeaderComponent} from './components/header/header.component';
-import {FooterComponent} from './components/footer/footer.component';
-import {BodyComponent} from './components/body/body.component';
+import {HeaderComponent} from './shared/header/header.component';
+import {FooterComponent} from './shared/footer/footer.component';
 import {MaterialModule} from './modules/material/material.module';
-import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
-import {AlertDialogComponent} from './components/alertdialog/alertdialog.component';
-import { NewElementComponent } from './components/new-element/new-element.component';
+import {ConfirmationDialogComponent} from './maintainers/element/dialogs/confirmation-dialog/confirmation-dialog.component';
+import {AlertDialogComponent} from './maintainers/element/dialogs/alertdialog/alertdialog.component';
+import { NewElementComponent } from './maintainers/element/dialogs/new-element/new-element.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import { EditElementComponent } from './maintainers/element/dialogs/edit-element/edit-element.component';
+import {ElementMantainerComponent} from './maintainers/element/components/element/elemenmantainer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    BodyComponent,
+    ElementMantainerComponent,
     ConfirmationDialogComponent,
     AlertDialogComponent,
-    NewElementComponent
+    NewElementComponent,
+    EditElementComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +36,7 @@ import {ReactiveFormsModule} from '@angular/forms';
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [ConfirmationDialogComponent, AlertDialogComponent, NewElementComponent],
+  entryComponents: [ConfirmationDialogComponent, AlertDialogComponent, NewElementComponent, EditElementComponent],
 })
 export class AppModule {
 }

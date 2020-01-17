@@ -5,18 +5,12 @@ import {MatTableDataSource} from '@angular/material/table';
 import {VERSION, MatDialogRef, MatDialog, MatSnackBar, MAT_DIALOG_DATA} from '@angular/material';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
-import {ConfirmationDialogComponent} from '../confirmation-dialog/confirmation-dialog.component';
-import {AlertDialogComponent} from '../alertdialog/alertdialog.component';
-import {NewElementComponent} from '../new-element/new-element.component';
-import { EditElementComponent } from '../edit-element/edit-element.component';
+import {ConfirmationDialogComponent} from '../../dialogs/confirmation-dialog/confirmation-dialog.component';
+import {AlertDialogComponent} from '../../dialogs/alertdialog/alertdialog.component';
+import {NewElementComponent} from '../../dialogs/new-element/new-element.component';
+import { EditElementComponent } from '../../dialogs/edit-element/edit-element.component';
+import {PeriodicElement} from '../../models/element.model';
 
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
 
 const ELEMENT_DATA: PeriodicElement[] = [
   {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
@@ -34,11 +28,11 @@ const ELEMENT_DATA: PeriodicElement[] = [
 
 
 @Component({
-  selector: 'app-body',
-  templateUrl: './body.component.html',
-  styleUrls: ['./body.component.sass']
+  selector: 'app-element-mantainer',
+  templateUrl: './elementmantainer.component.html',
+  styleUrls: ['./elementmantainer.component.sass']
 })
-export class BodyComponent implements OnInit {
+export class ElementMantainerComponent implements OnInit {
 
   displayedColumns: string[] = ['select', 'position', 'name', 'weight', 'symbol', 'actions'];
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
