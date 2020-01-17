@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild, Inject} from '@angular/core';
+import {Component, OnInit, ViewChild, Inject, ChangeDetectorRef } from '@angular/core';
 
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material/table';
@@ -8,7 +8,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {ConfirmationDialogComponent} from '../../dialogs/confirmation-dialog/confirmation-dialog.component';
 import {AlertDialogComponent} from '../../dialogs/alertdialog/alertdialog.component';
 import {NewElementComponent} from '../../dialogs/new-element/new-element.component';
-import { EditElementComponent } from '../../dialogs/edit-element/edit-element.component';
+import {EditElementComponent} from '../../dialogs/edit-element/edit-element.component';
 import {PeriodicElement} from '../../models/element.model';
 
 
@@ -38,6 +38,7 @@ export class ElementMantainerComponent implements OnInit {
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
   selection = new SelectionModel<PeriodicElement>(true, []);
 
+
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
@@ -63,18 +64,22 @@ export class ElementMantainerComponent implements OnInit {
   }
 
   constructor(private dialog: MatDialog,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private changeDetectorRefs: ChangeDetectorRef) {
   }
 
   ngOnInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    const bar: PeriodicElement = {position: 1, name: 'Lelele', weight: 1.0079, symbol: 'H'};
+    this.dataSource.data.push(bar);
+    this.changeDetectorRefs.detectChanges();
   }
 
   onNoClick(): void {
   }
 
-  openEditDialog(element){
+  openEditDialog(element) {
     const dialogRef = this.dialog.open(EditElementComponent, {
       data: {
         title: 'Elemento',
@@ -89,6 +94,7 @@ export class ElementMantainerComponent implements OnInit {
     const dialogRef = this.dialog.open(NewElementComponent, {
       data: {
         title: 'Elemento',
+        datasource: this.dataSource,
       },
       panelClass: 'my-class'
     });
@@ -103,14 +109,20 @@ export class ElementMantainerComponent implements OnInit {
     });*/
     //const snack = this.snackBar.open('Snack bar open before dialog');
 
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
+    dialogRef.afterClosed().subscribe((bar: PeriodicElement) => {
+      if (bar != null) {
+        this.dataSource.data.push(bar);
+        const newData = this.dataSource.data;
+        //this.dataSource._renderChangesSubscription;
+        console.log(bar);
+        this.dataSource = new MatTableDataSource<PeriodicElement>(newData);
         //const filteredItems = this.dataSource.data.filter(item => item !== element);
         //this.dataSource.data = filteredItems;
         //snack.dismiss();
         const a = document.createElement('a');
         a.click();
         a.remove();
+
         //snack.dismiss();
         /*this.snackBar.open('Closing snack bar in a few seconds', 'Fechar', {
           duration: 2000,
@@ -123,9 +135,9 @@ export class ElementMantainerComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         message: 'Are you sure want to delete?',
-          buttonText: {
+        buttonText: {
           ok: 'Delete',
-            cancel: 'Cancel'
+          cancel: 'Cancel'
         }
       },
       panelClass: 'my-panel'
@@ -146,6 +158,8 @@ export class ElementMantainerComponent implements OnInit {
         const filteredItems = this.dataSource.data.filter(item => item !== element);
         this.dataSource.data = filteredItems;
         //snack.dismiss();
+
+
         const a = document.createElement('a');
         a.click();
         a.remove();

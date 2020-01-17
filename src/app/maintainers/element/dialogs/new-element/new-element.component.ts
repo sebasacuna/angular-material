@@ -1,6 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import { FormGroup, FormBuilder,FormControl } from '@angular/forms';
+import {FormGroup, FormBuilder, FormControl} from '@angular/forms';
+import {PeriodicElement} from '../../models/element.model';
 
 @Component({
   selector: 'app-new-element',
@@ -10,17 +11,18 @@ import { FormGroup, FormBuilder,FormControl } from '@angular/forms';
 export class NewElementComponent implements OnInit {
 
   title = 'Elemento';
-  containerdialog = 'container-dialog'
+  containerdialog = 'container-dialog';
 
   public form: FormGroup;
 
-  constructor(@Inject(MAT_DIALOG_DATA) private data: any,
-  			  public fb: FormBuilder,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+              public fb: FormBuilder,
               private dialogRef: MatDialogRef<NewElementComponent>) {
+    console.log(data);
     if (data) {
       this.title = 'Elemento';
     }
-   this.createForm();
+    this.createForm();
 
   }
 
@@ -34,7 +36,22 @@ export class NewElementComponent implements OnInit {
   }
 
   close() {
-	  this.dialogRef.close();
+    this.dialogRef.close();
+  }
+
+  addNewElement() {
+    console.log(this.form);
+    console.log(this.data.datasource.data);
+    const bar: PeriodicElement = {
+      position: this.form.value.number,
+      name: this.form.value.name,
+      weight: this.form.value.weight,
+      symbol: this.form.value.symbol
+    };
+    //this.data.datasource.data.push( bar);
+    this.dialogRef.close( bar);
+
+    //console.log(this.data.datasource);
   }
 
   ngOnInit() {

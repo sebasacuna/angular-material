@@ -1,7 +1,8 @@
 <h2 mat-dialog-title [ngStyle]="{'margin-left':'6px'}">Element</h2>
 
-<mat-dialog-content [formGroup]="form" class="container-element">
+<mat-dialog-content  class="container-element">
 
+	<form style="display:flex;flex-direction: column;height: 800px;" [formGroup]="form" (ngSubmit)="addNewElement()">
   <mat-form-field class="example-full-width">
     <input matInput 
            type ="text"
@@ -30,11 +31,19 @@
            formControlName="symbol">
   </mat-form-field>
 
+  <mat-dialog-actions class="container-button">
+	<button type="submit" [ngStyle]="{'width':'130px','margin-right':'10px'}" class="mat-raised-button mat-primary" >Save</button>
+	<button [ngStyle]="{'width':'130px'}" class="mat-raised-button" (click)="close()">Close</button>	
+  </mat-dialog-actions>
+
+
+ 
+</form>
+
+
 </mat-dialog-content>
 
-<mat-dialog-actions class="container-button">
-  <button [ngStyle]="{'width':'130px','margin-right':'10px'}" class="mat-raised-button mat-primary">Save</button>
-  <button [ngStyle]="{'width':'130px'}" class="mat-raised-button" (click)="close()">Close</button>
-</mat-dialog-actions>
+
+
 
 
