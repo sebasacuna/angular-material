@@ -13,10 +13,10 @@ export class EditElementComponent implements OnInit {
   title = 'Elemento';
   containerdialog = 'container-dialog'
 
-  private formedit: FormGroup;
+  public formedit: FormGroup;
 
   constructor(@Inject(MAT_DIALOG_DATA) private data: any,
-              private fb: FormBuilder,
+              public fb: FormBuilder,
               private dialogRef: MatDialogRef<NewElementComponent>) {
     if (data) {
       this.title = 'Elemento';
@@ -34,6 +34,11 @@ export class EditElementComponent implements OnInit {
       symbol: data.symbol
     });
   }
+
+  close() {
+	this.dialogRef.close();
+  }
+
 
   ngOnInit() {
   }
