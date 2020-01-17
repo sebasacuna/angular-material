@@ -6,13 +6,14 @@
     <mat-form-field class="example-full-width">
       <input matInput
              id="number"
-             type="text"
+             class="form-control"
+             type="number"
              placeholder="Number of element"
              formControlName="number"
              required minlength="2"
-
       >
       <mat-error *ngIf="f.number.touched && f.number.errors?.required">Name is required</mat-error>
+      <mat-error *ngIf="f.number.touched && f.number.errors?.minlength">Minimun lenght 2</mat-error>
 
     </mat-form-field>
 
@@ -20,8 +21,10 @@
       <input matInput
              type="text"
              placeholder="Name of element"
+             required minlength="2"
              formControlName="name">
       <mat-error *ngIf="f.name.touched && f.name.errors?.required">Name is required</mat-error>
+      <mat-error *ngIf="f.number.touched && f.number.errors?.minlength">Minimun lenght 2</mat-error>
 
     </mat-form-field>
 
@@ -29,8 +32,10 @@
       <input matInput
              type="text"
              placeholder="Atomic weight"
+             required minlength="2"
              formControlName="weight">
       <mat-error *ngIf="f.weight.touched && f.weight.errors?.required">Name is required</mat-error>
+      <mat-error *ngIf="f.number.touched && f.number.errors?.minlength">Minimun lenght 2</mat-error>
 
     </mat-form-field>
 
@@ -38,8 +43,10 @@
       <input matInput
              type="text"
              placeholder="Symbol"
+             required minlength="2"
              formControlName="symbol">
       <mat-error *ngIf="f.symbol.touched && f.symbol.errors?.required">Name is required</mat-error>
+      <mat-error *ngIf="f.number.touched && f.number.errors?.minlength">Minimun lenght 2</mat-error>
 
     </mat-form-field>
 
