@@ -39,10 +39,16 @@ export class NewElementComponent implements OnInit {
   get f() { return this.form.controls; }
 
   close() {
-    this.dialogRef.close();
+    console.log('close');
+    const response = {
+      data: null,
+      response: false,
+    };
+    this.dialogRef.close(response);
   }
 
   addNewElement() {
+    console.log('add element');
     console.log(this.form);
     console.log(this.data.datasource.data);
     const bar: PeriodicElement = {
@@ -51,8 +57,12 @@ export class NewElementComponent implements OnInit {
       weight: this.form.value.weight,
       symbol: this.form.value.symbol
     };
+    const response = {
+      data: bar,
+      response: true,
+    };
     //this.data.datasource.data.push( bar);
-    this.dialogRef.close( bar);
+    this.dialogRef.close( response);
 
     //console.log(this.data.datasource);
   }

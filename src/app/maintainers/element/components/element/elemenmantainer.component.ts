@@ -134,8 +134,10 @@ export class ElementMantainerComponent implements OnInit {
     //const snack = this.snackBar.open('Snack bar open before dialog');
 
 
-    dialogRef.afterClosed().subscribe((bar: PeriodicElement) => {
-      if (bar != null) {
+    dialogRef.afterClosed().subscribe((bar) => {
+      console.log('revisar');
+      console.log(bar);
+      if (bar.response) {
         this.dataSource.data.push(bar);
         const newData = this.dataSource.data;
         //this.dataSource._renderChangesSubscription;
