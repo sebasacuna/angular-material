@@ -138,8 +138,8 @@ export class ElementMantainerComponent implements OnInit {
       console.log('revisar');
       console.log(bar);
       if (bar.response) {
-        this.dataSource.data.push(bar);
-        const newData = this.dataSource.data;
+        this.dataSource.data.push(bar.data);
+        const newData: PeriodicElement[] = this.dataSource.data;
         //this.dataSource._renderChangesSubscription;
         console.log(bar);
         this.dataSource = new MatTableDataSource<PeriodicElement>(newData);

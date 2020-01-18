@@ -61,10 +61,7 @@ export class NewElementComponent implements OnInit {
       data: bar,
       response: true,
     };
-    //this.data.datasource.data.push( bar);
     this.dialogRef.close( response);
-
-    //console.log(this.data.datasource);
   }
 
   ngOnInit() {
