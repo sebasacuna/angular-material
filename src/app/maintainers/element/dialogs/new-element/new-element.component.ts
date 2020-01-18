@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {FormGroup, FormBuilder, FormControl, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {PeriodicElement} from '../../models/element.model';
 
 @Component({
@@ -29,14 +29,17 @@ export class NewElementComponent implements OnInit {
   createForm() {
     this.form = this.fb.group({
       number: new FormControl('', [Validators.required]),
-      name: new FormControl('', [Validators.required]),
-      weight: new FormControl( '', [Validators.required]),
-      symbol: new FormControl( '', [Validators.required])
+      name: new FormControl('', [Validators.required,
+        Validators.maxLength(15)]),
+      weight: new FormControl('', [Validators.required]),
+      symbol: new FormControl('', [Validators.required])
     });
   }
 
 
-  get f() { return this.form.controls; }
+  get f() {
+    return this.form.controls;
+  }
 
   close() {
     console.log('close');
@@ -61,7 +64,7 @@ export class NewElementComponent implements OnInit {
       data: bar,
       response: true,
     };
-    this.dialogRef.close( response);
+    this.dialogRef.close(response);
   }
 
   ngOnInit() {

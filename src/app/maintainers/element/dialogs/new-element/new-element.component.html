@@ -8,6 +8,7 @@
              id="number"
              class="form-control"
              type="text"
+             maxlength="15"
              mask="separator" thousandSeparator="."
              placeholder="Number of element"
              formControlName="number"
@@ -23,9 +24,10 @@
              type="text"
              placeholder="Name of element"
              required
+             maxlength="15"
              formControlName="name">
       <mat-error *ngIf="f.name.touched && f.name.errors?.required">Name is required</mat-error>
-      <mat-error *ngIf="f.number.touched && f.number.errors?.minlength">Minimun lenght 2</mat-error>
+      <mat-error *ngIf="f.name.touched && f.name.errors?.maxlength">Max lenght 15</mat-error>
 
     </mat-form-field>
 
@@ -33,6 +35,7 @@
       <input matInput
              type="text"
              placeholder="Atomic weight"
+             maxlength="15"
              required
              formControlName="weight">
       <mat-error *ngIf="f.weight.touched && f.weight.errors?.required">Name is required</mat-error>
@@ -45,6 +48,7 @@
              type="text"
              placeholder="Symbol"
              required
+             maxlength="4"
              formControlName="symbol">
       <mat-error *ngIf="f.symbol.touched && f.symbol.errors?.required">Name is required</mat-error>
       <mat-error *ngIf="f.number.touched && f.number.errors?.minlength">Minimun lenght 2</mat-error>
@@ -55,7 +59,7 @@
       <button type="submit" [disabled]="!form.valid" [ngStyle]="{'width':'130px','margin-right':'10px'}"
               class="mat-raised-button mat-primary">Save
       </button>
-      <button [ngStyle]="{'width':'130px'}"  type="button" class="mat-raised-button" (click)="close()">Close</button>
+      <button [ngStyle]="{'width':'130px'}" type="button" class="mat-raised-button" (click)="close()">Close</button>
     </mat-dialog-actions>
 
 
