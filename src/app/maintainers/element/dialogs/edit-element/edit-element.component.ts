@@ -42,6 +42,10 @@ export class EditElementComponent implements OnInit {
 	this.dialogRef.close();
   }
 
+  get f() {
+    return this.formedit.controls;
+  }
+
 
   ngOnInit() {
   }

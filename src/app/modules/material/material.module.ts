@@ -12,10 +12,10 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import {MatInputModule} from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import {MatGridListModule} from '@angular/material/grid-list';
 import {
   MatCheckboxModule,
   MatFormFieldModule,
-  MatGridListModule,
   MatIconModule,
   MatListModule,
   MatMenuModule,

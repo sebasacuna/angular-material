@@ -1,8 +1,8 @@
-import {Component, OnInit, ViewChild, Inject, ChangeDetectorRef } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material/table';
-import {VERSION, MatDialogRef, MatDialog, MatSnackBar, MAT_DIALOG_DATA} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
 import {ConfirmationDialogComponent} from '../../dialogs/confirmation-dialog/confirmation-dialog.component';
@@ -150,10 +150,11 @@ export class ElementMantainerComponent implements OnInit {
         a.click();
         a.remove();
 
+
         //snack.dismiss();
-        /*this.snackBar.open('Closing snack bar in a few seconds', 'Fechar', {
+        this.snackBar.open('New element added', 'Close', {
           duration: 2000,
-        });*/
+        });
       }
     });
   }

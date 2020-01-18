@@ -3,37 +3,60 @@
 <mat-dialog-content [formGroup]="formedit" class="container-element">
 
   <mat-form-field class="example-full-width">
-    <input matInput 
-           type ="text"
+    <input matInput
+           type="text"
+           required
+           autocomplete="off"
+           mask="separator" thousandSeparator="."
+           maxlength="15"
            placeholder="Number of element"
-           formControlName="number" >
+           formControlName="number">
   </mat-form-field>
+  <mat-error *ngIf="f.number.touched && f.number.errors?.required">Number is required</mat-error>
+  <mat-error *ngIf="f.number.touched && f.number.errors?.minlength">Minimun lenght 2</mat-error>
 
   <mat-form-field class="example-full-width">
-    <input matInput 
-    type ="text"
+    <input matInput
+           type="text"
            placeholder="Name of element"
+           required
+           autocomplete="off"
+           maxlength="15"
            formControlName="name">
   </mat-form-field>
+  <mat-error *ngIf="f.name.touched && f.name.errors?.required">Name is required</mat-error>
+  <mat-error *ngIf="f.name.touched && f.name.errors?.maxlength">Max lenght 15</mat-error>
 
   <mat-form-field class="example-full-width">
-    <input matInput 
-    type ="text"
+    <input matInput
+           type="text"
            placeholder="Atomic weight"
+           mask="separator" thousandSeparator="."
+           maxlength="15"
+           autocomplete="off"
+           required
            formControlName="weight">
   </mat-form-field>
+  <mat-error *ngIf="f.weight.touched && f.weight.errors?.required">Atomic weight is required</mat-error>
+  <mat-error *ngIf="f.number.touched && f.number.errors?.minlength">Minimun lenght 2</mat-error>
+
 
   <mat-form-field class="example-full-width">
-    <input matInput 
-    type ="text"  
+    <input matInput
+           type="text"
            placeholder="Symbol"
+           required
+           autocomplete="off"
+           maxlength="4"
            formControlName="symbol">
   </mat-form-field>
+  <mat-error *ngIf="f.symbol.touched && f.symbol.errors?.required">Symbol is required</mat-error>
+  <mat-error *ngIf="f.number.touched && f.number.errors?.minlength">Minimun lenght 2</mat-error>
 
 </mat-dialog-content>
 
 <mat-dialog-actions class="container-button">
-  <button [ngStyle]="{'width':'130px','margin-right':'10px'}" class="mat-raised-button mat-primary">Save</button>
+  <button type="submit" [disabled]="!formedit.valid" [ngStyle]="{'width':'130px','margin-right':'10px'}" class="mat-raised-button mat-primary">Save</button>
   <button [ngStyle]="{'width':'130px'}" class="mat-raised-button" (click)="close()">Close</button>
 </mat-dialog-actions>
 
