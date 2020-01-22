@@ -55,7 +55,7 @@ export class NewElementComponent implements OnInit {
     console.log(this.form);
     console.log(this.data.datasource.data);
     const bar: PeriodicElement = {
-      position: this.form.value.number,
+      number: this.form.value.number,
       name: this.form.value.name,
       weight: this.form.value.weight,
       symbol: this.form.value.symbol

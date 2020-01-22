@@ -4,11 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "node server.js",
-    "build": "ng build --prod --aot --vendor-chunk --common-chunk --delete-output-path --buildOptimizer",
+    "build": "ng build --prod --aot --vendor-chunk --common-chunk --delete-output-path --buildOptimizer --stats-json",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "ng build --prod --aot --vendor-chunk --common-chunk --delete-output-path --buildOptimizer"
+    "postinstall": "ng build --prod --aot --vendor-chunk --common-chunk --delete-output-path --buildOptimizer --stats-json"
   },
   "engines": {
     "node": "~12.13.0",

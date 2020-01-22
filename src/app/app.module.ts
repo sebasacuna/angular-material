@@ -16,6 +16,8 @@ import {ReactiveFormsModule} from '@angular/forms';
 import { EditElementComponent } from './maintainers/element/dialogs/edit-element/edit-element.component';
 import {ElementMantainerComponent} from './maintainers/element/components/element/elemenmantainer.component';
 
+import { HttpClientModule } from '@angular/common/http';
+
 import {IConfig, NgxMaskModule} from 'ngx-mask';
 
 export let options: Partial<IConfig> | (() => Partial<IConfig>);
@@ -37,6 +39,7 @@ export let options: Partial<IConfig> | (() => Partial<IConfig>);
     AppRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
+    HttpClientModule,
     NgxMaskModule.forRoot(options)
   ],
   providers: [],

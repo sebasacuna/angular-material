@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material/table';
@@ -10,21 +10,9 @@ import {AlertDialogComponent} from '../../dialogs/alertdialog/alertdialog.compon
 import {NewElementComponent} from '../../dialogs/new-element/new-element.component';
 import {EditElementComponent} from '../../dialogs/edit-element/edit-element.component';
 import {PeriodicElement} from '../../models/element.model';
-
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  {position: 11, name: 'Argon', weight: 20.1797, symbol: 'Arg'},
-];
+import {ElementService} from '../../services/element.service';
+import {Observable} from 'rxjs';
+import {first} from 'rxjs/operators';
 
 
 @Component({
@@ -32,15 +20,18 @@ const ELEMENT_DATA: PeriodicElement[] = [
   templateUrl: './elementmantainer.component.html',
   styleUrls: ['./elementmantainer.component.sass']
 })
-export class ElementMantainerComponent implements OnInit {
+export class ElementMantainerComponent implements OnInit, OnDestroy {
 
-  displayedColumns: string[] = ['select', 'position', 'name', 'weight', 'symbol', 'actions'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  displayedColumns: string[] = ['select', 'number', 'name', 'weight', 'symbol', 'actions'];
+
   selection = new SelectionModel<PeriodicElement>(true, []);
 
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  private dataSource: MatTableDataSource<PeriodicElement>;
+
+  public current$: Observable<any> = null;
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -60,45 +51,73 @@ export class ElementMantainerComponent implements OnInit {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.number + 1}`;
   }
 
   constructor(private dialog: MatDialog,
               private snackBar: MatSnackBar,
+              private elementService: ElementService,
               private changeDetectorRefs: ChangeDetectorRef) {
+
+    this.elementService.getElements().pipe(
+      /*map(
+      (data) => {
+        console.log('inside of pipe');
+        console.log(data);
+        return data;
+      }*/
+      first(
+      )
+    ).subscribe(
+      response => {
+        console.log('inside subcribe');
+        this.dataSource = new MatTableDataSource<PeriodicElement>(response);
+        console.log(response);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        //this.changeDetectorRefs.detectChanges();
+      }, err => {
+        console.error(err);
+      });
   }
 
   ngOnInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    const bar: PeriodicElement = {position: 1, name: 'Lelele', weight: 1.0079, symbol: 'H'};
-    this.dataSource.data.push(bar);
-    this.changeDetectorRefs.detectChanges();
+
+
   }
 
   onNoClick(): void {
   }
 
-  openEditDialog(element, index) {
+  edit(element) {
+    console.log('edit');
+    console.log(element);
     const dialogRef = this.dialog.open(EditElementComponent, {
       data: {
         title: 'Elemento',
         data: element,
-        indexRow: index
       },
       panelClass: 'my-class'
     });
 
-    dialogRef.afterClosed().subscribe((bar: PeriodicElement) => {
-      if (bar != null) {
-        this.dataSource.data.push(bar);
-        const newData = this.dataSource.data;
+    dialogRef.afterClosed().subscribe((bar) => {
+      if (bar.response) {
+        this.elementService.updateElements(bar.data).subscribe(response => {
+          if (response) {
+            this.elementService.getElements().subscribe(response2 => {
+              this.dataSource = new MatTableDataSource<PeriodicElement>(response2);
+            }, err => {
+              console.error(err);
+            });
+          }
+
+        }, err => {
+          console.error(err);
+        });
+
         //this.dataSource._renderChangesSubscription;
-        console.log(bar);
+        //const filteredItems = this.dataSource.data.filter(item => item !== element);
 
-
-        const filteredItems = this.dataSource.data.filter(item => item !== element);
-        this.dataSource = new MatTableDataSource<PeriodicElement>(newData);
         //this.dataSource.data = filteredItems;
         //snack.dismiss();
         const a = document.createElement('a');
@@ -106,9 +125,9 @@ export class ElementMantainerComponent implements OnInit {
         a.remove();
 
         //snack.dismiss();
-        /*this.snackBar.open('Closing snack bar in a few seconds', 'Fechar', {
+        this.snackBar.open('Edited element', 'Close', {
           duration: 2000,
-        });*/
+        });
       }
     });
   }
@@ -138,14 +157,14 @@ export class ElementMantainerComponent implements OnInit {
       console.log('revisar');
       console.log(bar);
       if (bar.response) {
-        this.dataSource.data.push(bar.data);
-        const newData: PeriodicElement[] = this.dataSource.data;
-        //this.dataSource._renderChangesSubscription;
-        console.log(bar);
-        this.dataSource = new MatTableDataSource<PeriodicElement>(newData);
-        //const filteredItems = this.dataSource.data.filter(item => item !== element);
-        //this.dataSource.data = filteredItems;
-        //snack.dismiss();
+        this.elementService.createElements(bar.data).subscribe(response => {
+          console.log(response);
+          this.dataSource.data.push(bar.data);
+          const newData: PeriodicElement[] = this.dataSource.data;
+          this.dataSource = new MatTableDataSource<PeriodicElement>(newData);
+        }, err => {
+          console.error(err);
+        });
         const a = document.createElement('a');
         a.click();
         a.remove();
@@ -159,7 +178,7 @@ export class ElementMantainerComponent implements OnInit {
     });
   }
 
-  openDialog(element) {
+  delete(element) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         message: 'Are you sure want to delete?',
@@ -183,8 +202,16 @@ export class ElementMantainerComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
-        const filteredItems = this.dataSource.data.filter(item => item !== element);
-        this.dataSource.data = filteredItems;
+        this.elementService.deleteElement({id: element.number}).subscribe(response => {
+          if (response) {
+            const filteredItems = this.dataSource.data.filter(item => item !== element);
+            this.dataSource.data = filteredItems;
+          }
+        }, err => {
+          console.error(err);
+        });
+
+
         //snack.dismiss();
 
 
@@ -192,6 +219,9 @@ export class ElementMantainerComponent implements OnInit {
         a.click();
         a.remove();
         //snack.dismiss();
+        this.snackBar.open('Element erased', 'Close', {
+          duration: 2000,
+        });
         /*this.snackBar.open('Closing snack bar in a few seconds', 'Fechar', {
           duration: 2000,
         });*/
@@ -208,6 +238,10 @@ export class ElementMantainerComponent implements OnInit {
         }
       },
     });
+  }
+
+  public ngOnDestroy(): void {
+
   }
 
   getTotalRows() {
