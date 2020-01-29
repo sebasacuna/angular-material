@@ -12,7 +12,7 @@ import {EditElementComponent} from '../../dialogs/edit-element/edit-element.comp
 import {PeriodicElement} from '../../models/element.model';
 import {ElementService} from '../../services/element.service';
 import {Observable} from 'rxjs';
-import {concatMap, first} from 'rxjs/operators';
+import {concatMap, first, tap} from 'rxjs/operators';
 
 
 @Component({
@@ -22,22 +22,36 @@ import {concatMap, first} from 'rxjs/operators';
 })
 export class ElementMantainerComponent implements OnInit, OnDestroy {
 
+  constructor(private dialog: MatDialog,
+              private snackBar: MatSnackBar,
+              private elementService: ElementService,
+              private changeDetectorRefs: ChangeDetectorRef) {
+    this.elementService.getCountElements().pipe(
+      concatMap(result => {
+        this.length = result;
+        this.pageIndex = 0;
+        this.pageSize = 5;
+        return elementService.getElementsPagination(5, 0);
+      })
+    ).subscribe(
+      response => {
+        this.dataSource = new MatTableDataSource<PeriodicElement>(response);
+        //this.changeDetectorRefs.detectChanges();
+      }, err => {
+        console.error(err);
+      });
+
+  }
+
   displayedColumns: string[] = ['select', 'number', 'name', 'weight', 'symbol', 'actions'];
 
   length: any;
   pageIndex: any;
   pageSize: any;
   pageEvent: any;
+  lele: any;
 
   selection = new SelectionModel<PeriodicElement>(true, []);
-
-  getServerData(event) {
-    this.elementService.getElementsPagination(event.pageSize, event.pageIndex).subscribe(response => {
-      this.dataSource = new MatTableDataSource<PeriodicElement>(response);
-    }, err => {
-      console.error(err);
-    });
-  }
 
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -47,6 +61,17 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
   private dataSource: MatTableDataSource<PeriodicElement>;
 
   public current$: Observable<any> = null;
+
+  getServerData(event) {
+    console.log('clicked');
+    this.pageSize = event.pageSize;
+    this.pageIndex = event.pageIndex;
+    this.elementService.getElementsPagination(event.pageSize, event.pageIndex).subscribe(response => {
+      this.dataSource = new MatTableDataSource<PeriodicElement>(response);
+    }, err => {
+      console.error(err);
+    });
+  }
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -69,28 +94,7 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.number + 1}`;
   }
 
-  constructor(private dialog: MatDialog,
-              private snackBar: MatSnackBar,
-              private elementService: ElementService,
-              private changeDetectorRefs: ChangeDetectorRef) {
-    this.elementService.getCountElements().pipe(
-      concatMap(result => {
-        this.length = result;
-        return elementService.getElementsPagination(5, 0);
-      })
-    ).subscribe(
-      response => {
-        this.dataSource = new MatTableDataSource<PeriodicElement>(response);
-        //this.changeDetectorRefs.detectChanges();
-      }, err => {
-        console.error(err);
-      });
-
-  }
-
   ngOnInit() {
-
-
   }
 
   onNoClick(): void {
@@ -109,18 +113,29 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((bar) => {
       if (bar.response) {
-        this.elementService.updateElements(bar.data).subscribe(response => {
-          if (response) {
-            this.elementService.getElements().subscribe(response2 => {
-              this.dataSource = new MatTableDataSource<PeriodicElement>(response2);
-            }, err => {
-              console.error(err);
-            });
-          }
 
-        }, err => {
-          console.error(err);
-        });
+        this.elementService.updateElements(bar.data)
+          .pipe(
+            tap(
+              response => {
+                console.log(response);
+              }, err => {
+                console.error(err);
+              }
+            ),
+            concatMap((res) => {
+              console.log('update tap');
+              console.log(res);
+              if (res) {
+                return this.elementService.getElementsPagination(this.pageSize, this.pageIndex);
+              }
+            }),
+          ).subscribe(response2 => {
+            this.dataSource = new MatTableDataSource<PeriodicElement>(response2);
+          }, err => {
+            console.error(err);
+          }
+        );
 
         //this.dataSource._renderChangesSubscription;
         //const filteredItems = this.dataSource.data.filter(item => item !== element);
@@ -160,18 +175,65 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
     //const snack = this.snackBar.open('Snack bar open before dialog');
 
 
+    console.log('Page size: ' + this.pageSize);
+
     dialogRef.afterClosed().subscribe((bar) => {
       console.log('revisar');
       console.log(bar);
       if (bar.response) {
-        this.elementService.createElements(bar.data).subscribe(response => {
+        console.log('antes de la llamada');
+        this.elementService.createElements(bar.data)
+          .pipe(
+            tap(
+              response => {
+                console.log('añadir elemento');
+                console.log(response);
+              }, err => {
+                console.error(err);
+              }
+            ),
+            concatMap((res) => this.elementService.getElementsPagination(this.pageSize, this.pageIndex)),
+            tap(
+              response => {
+                this.dataSource = new MatTableDataSource<PeriodicElement>(response);
+              }, err => {
+                console.error(err);
+              }
+            ),
+            concatMap((res) => this.elementService.getCountElements()),
+            tap(
+              response => {
+                this.length = response;
+              }, err => {
+                console.error(err);
+              }
+            )
+          ).subscribe(res => console.log('Latest result', res));
+
+        /* this.elementService.createElements(bar.data).pipe(
+           concatMap(response => {
+             console.log(response);
+             this.dataSource.data.push(bar.data);
+             const newData: PeriodicElement[] = this.dataSource.data;
+             this.dataSource = new MatTableDataSource<PeriodicElement>(newData);
+             return this.elementService.getCountElements();
+           })
+         ).subscribe(
+           response => {
+             this.length = response;
+             //this.changeDetectorRefs.detectChanges();
+           }, err => {
+             console.error(err);
+           });*/
+
+        /*this.elementService.createElements(bar.data).subscribe(response => {
           console.log(response);
           this.dataSource.data.push(bar.data);
           const newData: PeriodicElement[] = this.dataSource.data;
           this.dataSource = new MatTableDataSource<PeriodicElement>(newData);
         }, err => {
           console.error(err);
-        });
+        });*/
         const a = document.createElement('a');
         a.click();
         a.remove();
@@ -209,14 +271,32 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
-        this.elementService.deleteElement({id: element.number}).subscribe(response => {
+
+        this.elementService.deleteElement({id: element.number}).pipe(
+          concatMap(result => {
+            if (result) {
+              const filteredItems = this.dataSource.data.filter(item => item !== element);
+              this.dataSource.data = filteredItems;
+            }
+            return this.elementService.getCountElements();
+          })
+        ).subscribe(
+          response => {
+            this.length = response;
+            //this.changeDetectorRefs.detectChanges();
+          }, err => {
+            console.error(err);
+          });
+
+
+        /*this.elementService.deleteElement({id: element.number}).subscribe(response => {
           if (response) {
             const filteredItems = this.dataSource.data.filter(item => item !== element);
             this.dataSource.data = filteredItems;
           }
         }, err => {
           console.error(err);
-        });
+        });*/
 
 
         //snack.dismiss();
@@ -252,9 +332,6 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
   }
 
   getTotalRows() {
-    //console.log('data');
-    //console.log(this.paginator.length);
-    //console.log(this.paginator.pageSize);
     return this.dataSource.data.length;
   }
 }
