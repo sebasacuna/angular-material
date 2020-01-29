@@ -12,7 +12,7 @@ import {EditElementComponent} from '../../dialogs/edit-element/edit-element.comp
 import {PeriodicElement} from '../../models/element.model';
 import {ElementService} from '../../services/element.service';
 import {Observable} from 'rxjs';
-import {first} from 'rxjs/operators';
+import {concatMap, first} from 'rxjs/operators';
 
 
 @Component({
@@ -24,11 +24,26 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
 
   displayedColumns: string[] = ['select', 'number', 'name', 'weight', 'symbol', 'actions'];
 
+  length: any;
+  pageIndex: any;
+  pageSize: any;
+  pageEvent: any;
+
   selection = new SelectionModel<PeriodicElement>(true, []);
+
+  getServerData(event) {
+    this.elementService.getElementsPagination(event.pageSize, event.pageIndex).subscribe(response => {
+      this.dataSource = new MatTableDataSource<PeriodicElement>(response);
+    }, err => {
+      console.error(err);
+    });
+  }
 
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+
   private dataSource: MatTableDataSource<PeriodicElement>;
 
   public current$: Observable<any> = null;
@@ -58,27 +73,19 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
               private snackBar: MatSnackBar,
               private elementService: ElementService,
               private changeDetectorRefs: ChangeDetectorRef) {
-
-    this.elementService.getElements().pipe(
-      /*map(
-      (data) => {
-        console.log('inside of pipe');
-        console.log(data);
-        return data;
-      }*/
-      first(
-      )
+    this.elementService.getCountElements().pipe(
+      concatMap(result => {
+        this.length = result;
+        return elementService.getElementsPagination(5, 0);
+      })
     ).subscribe(
       response => {
-        console.log('inside subcribe');
         this.dataSource = new MatTableDataSource<PeriodicElement>(response);
-        console.log(response);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
         //this.changeDetectorRefs.detectChanges();
       }, err => {
         console.error(err);
       });
+
   }
 
   ngOnInit() {

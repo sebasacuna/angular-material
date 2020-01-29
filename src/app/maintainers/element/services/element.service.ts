@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {AppConstants} from '../../../util/app-constants';
 import {PeriodicElement} from '../models/element.model';
 
@@ -18,6 +18,15 @@ export class ElementService {
 
   getElements() {
     return this.http.get<PeriodicElement[]>(this.baseUrl + '/element');
+  }
+
+  getCountElements() {
+    return this.http.get<any>(this.baseUrl + '/elementcount');
+  }
+
+  getElementsPagination(pageSize, pageIndex) {
+    const params = new HttpParams().set('pageSize', pageSize).set('pageIndex', pageIndex);
+    return this.http.get<PeriodicElement[]>(this.baseUrl + '/element', {params});
   }
 
   createElements(data) {
