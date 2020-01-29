@@ -58,7 +58,7 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  private dataSource: MatTableDataSource<PeriodicElement>;
+  public dataSource: MatTableDataSource<PeriodicElement>;
 
   public current$: Observable<any> = null;
 
