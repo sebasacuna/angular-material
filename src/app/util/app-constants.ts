@@ -1,7 +1,7 @@
 export class AppConstants {
 
   public static get baseURL(): string {
-    return 'http://localhost:8080/api';
+    return 'http://angular-forms-api.herokuapp.com/api';
   }
 
 }
