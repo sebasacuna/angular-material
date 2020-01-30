@@ -63,7 +63,10 @@ export class EditElementComponent implements OnInit {
   }
 
   close() {
-    this.dialogRef.close();
+    const response = {
+      response: false,
+    };
+    this.dialogRef.close(response);
   }
 
   get f() {

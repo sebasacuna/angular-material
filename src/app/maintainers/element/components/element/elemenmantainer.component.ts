@@ -29,7 +29,6 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
               private elementService: ElementService,
               private changeDetectorRefs: ChangeDetectorRef) {
 
-    this.logger.info('contructor');
     this.elementService.getCountElements().pipe(
       concatMap(result => {
         this.length = result;
@@ -76,9 +75,12 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
   }
 
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+    if (!this.dataSource === undefined) {
+      const numSelected = this.selection.selected.length;
+      const numRows = this.dataSource.data.length;
+      return numSelected === numRows;
+    }
+
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
@@ -170,14 +172,14 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
                 this.logger.error(this.openDialogNewElement.name + ' ', err);
               }
             ),
-            concatMap((res) => this.elementService.getElementsPagination(this.pageSize, this.pageIndex)),
+            /*concatMap((res) => this.elementService.getElementsPagination(this.pageSize, this.pageIndex)),
             tap(
               response => {
                 this.dataSource = new MatTableDataSource<PeriodicElement>(response);
               }, err => {
                 this.logger.error(this.openDialogNewElement.name + ' ', err);
               }
-            ),
+            ),*/
             concatMap((res) => this.elementService.getCountElements()),
             tap(
               response => {
@@ -187,6 +189,8 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
               }
             )
           ).subscribe(res => this.logger.info('Latest result', res));
+
+        this.refreshTable();
 
         const a = document.createElement('a');
         a.click();
@@ -254,7 +258,17 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
 
   }
 
+  private refreshTable() {
+    // Refreshing table using paginator
+    // Thanks yeager-j for tips
+    // https://github.com/marinantonio/angular-mat-table-crud/issues/12
+    this.paginator._changePageSize(this.paginator.pageSize);
+  }
+
+
   getTotalRows() {
-    return this.dataSource.data.length;
+    if (!this.dataSource === undefined) {
+      return this.dataSource.data.length;
+    }
   }
 }
