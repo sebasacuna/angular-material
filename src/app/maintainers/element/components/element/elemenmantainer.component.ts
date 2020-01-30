@@ -12,7 +12,8 @@ import {EditElementComponent} from '../../dialogs/edit-element/edit-element.comp
 import {PeriodicElement} from '../../models/element.model';
 import {ElementService} from '../../services/element.service';
 import {Observable} from 'rxjs';
-import {concatMap, first, tap} from 'rxjs/operators';
+import {concatMap, tap} from 'rxjs/operators';
+import {NGXLogger} from 'ngx-logger';
 
 
 @Component({
@@ -22,10 +23,13 @@ import {concatMap, first, tap} from 'rxjs/operators';
 })
 export class ElementMantainerComponent implements OnInit, OnDestroy {
 
-  constructor(private dialog: MatDialog,
+  constructor(private logger: NGXLogger,
+              private dialog: MatDialog,
               private snackBar: MatSnackBar,
               private elementService: ElementService,
               private changeDetectorRefs: ChangeDetectorRef) {
+
+    this.logger.info('contructor');
     this.elementService.getCountElements().pipe(
       concatMap(result => {
         this.length = result;
@@ -36,9 +40,8 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
     ).subscribe(
       response => {
         this.dataSource = new MatTableDataSource<PeriodicElement>(response);
-        //this.changeDetectorRefs.detectChanges();
       }, err => {
-        console.error(err);
+        this.logger.error(err);
       });
 
   }
@@ -49,7 +52,6 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
   pageIndex: any;
   pageSize: any;
   pageEvent: any;
-  lele: any;
 
   selection = new SelectionModel<PeriodicElement>(true, []);
 
@@ -63,13 +65,13 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
   public current$: Observable<any> = null;
 
   getServerData(event) {
-    console.log('clicked');
+    this.logger.info(`${this.getServerData.name} `, event);
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
     this.elementService.getElementsPagination(event.pageSize, event.pageIndex).subscribe(response => {
       this.dataSource = new MatTableDataSource<PeriodicElement>(response);
     }, err => {
-      console.error(err);
+      this.logger.error(this.getServerData.name + ' ', err);
     });
   }
 
@@ -98,11 +100,11 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
   }
 
   onNoClick(): void {
+
   }
 
   edit(element) {
-    console.log('edit');
-    console.log(element);
+    this.logger.info(this.edit.name + 'edit');
     const dialogRef = this.dialog.open(EditElementComponent, {
       data: {
         title: 'Elemento',
@@ -118,14 +120,13 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
           .pipe(
             tap(
               response => {
-                console.log(response);
+                this.logger.info(this.edit.name + ' ', response);
               }, err => {
-                console.error(err);
+                this.logger.error(this.edit.name + ' ', err);
               }
             ),
             concatMap((res) => {
-              console.log('update tap');
-              console.log(res);
+              this.logger.info('update ta', res);
               if (res) {
                 return this.elementService.getElementsPagination(this.pageSize, this.pageIndex);
               }
@@ -133,20 +134,14 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
           ).subscribe(response2 => {
             this.dataSource = new MatTableDataSource<PeriodicElement>(response2);
           }, err => {
-            console.error(err);
+            this.logger.error(this.edit.name + ' ', err);
           }
         );
 
-        //this.dataSource._renderChangesSubscription;
-        //const filteredItems = this.dataSource.data.filter(item => item !== element);
-
-        //this.dataSource.data = filteredItems;
-        //snack.dismiss();
         const a = document.createElement('a');
         a.click();
         a.remove();
 
-        //snack.dismiss();
         this.snackBar.open('Edited element', 'Close', {
           duration: 2000,
         });
@@ -163,33 +158,16 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
       },
       panelClass: 'my-class'
     });
-    /*const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: {
-        message: 'Are you sure want to delete?',
-        buttonText: {
-          ok: 'Save',
-          cancel: 'No'
-        }
-      }
-    });*/
-    //const snack = this.snackBar.open('Snack bar open before dialog');
-
-
-    console.log('Page size: ' + this.pageSize);
 
     dialogRef.afterClosed().subscribe((bar) => {
-      console.log('revisar');
-      console.log(bar);
       if (bar.response) {
-        console.log('antes de la llamada');
         this.elementService.createElements(bar.data)
           .pipe(
             tap(
               response => {
-                console.log('añadir elemento');
-                console.log(response);
+                this.logger.info(this.openDialogNewElement.name + ' add element ', response);
               }, err => {
-                console.error(err);
+                this.logger.error(this.openDialogNewElement.name + ' ', err);
               }
             ),
             concatMap((res) => this.elementService.getElementsPagination(this.pageSize, this.pageIndex)),
@@ -197,7 +175,7 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
               response => {
                 this.dataSource = new MatTableDataSource<PeriodicElement>(response);
               }, err => {
-                console.error(err);
+                this.logger.error(this.openDialogNewElement.name + ' ', err);
               }
             ),
             concatMap((res) => this.elementService.getCountElements()),
@@ -205,41 +183,15 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
               response => {
                 this.length = response;
               }, err => {
-                console.error(err);
+                this.logger.error(this.openDialogNewElement.name + ' ', err);
               }
             )
-          ).subscribe(res => console.log('Latest result', res));
+          ).subscribe(res => this.logger.info('Latest result', res));
 
-        /* this.elementService.createElements(bar.data).pipe(
-           concatMap(response => {
-             console.log(response);
-             this.dataSource.data.push(bar.data);
-             const newData: PeriodicElement[] = this.dataSource.data;
-             this.dataSource = new MatTableDataSource<PeriodicElement>(newData);
-             return this.elementService.getCountElements();
-           })
-         ).subscribe(
-           response => {
-             this.length = response;
-             //this.changeDetectorRefs.detectChanges();
-           }, err => {
-             console.error(err);
-           });*/
-
-        /*this.elementService.createElements(bar.data).subscribe(response => {
-          console.log(response);
-          this.dataSource.data.push(bar.data);
-          const newData: PeriodicElement[] = this.dataSource.data;
-          this.dataSource = new MatTableDataSource<PeriodicElement>(newData);
-        }, err => {
-          console.error(err);
-        });*/
         const a = document.createElement('a');
         a.click();
         a.remove();
 
-
-        //snack.dismiss();
         this.snackBar.open('New element added', 'Close', {
           duration: 2000,
         });
@@ -258,16 +210,6 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
       },
       panelClass: 'my-panel'
     });
-    /*const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      data: {
-        message: 'Are you sure want to delete?',
-        buttonText: {
-          ok: 'Save',
-          cancel: 'No'
-        }
-      }
-    });*/
-    //const snack = this.snackBar.open('Snack bar open before dialog');
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
@@ -283,35 +225,16 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
         ).subscribe(
           response => {
             this.length = response;
-            //this.changeDetectorRefs.detectChanges();
           }, err => {
-            console.error(err);
+            this.logger.error(this.delete.name + ' ', err);
           });
-
-
-        /*this.elementService.deleteElement({id: element.number}).subscribe(response => {
-          if (response) {
-            const filteredItems = this.dataSource.data.filter(item => item !== element);
-            this.dataSource.data = filteredItems;
-          }
-        }, err => {
-          console.error(err);
-        });*/
-
-
-        //snack.dismiss();
-
 
         const a = document.createElement('a');
         a.click();
         a.remove();
-        //snack.dismiss();
         this.snackBar.open('Element erased', 'Close', {
           duration: 2000,
         });
-        /*this.snackBar.open('Closing snack bar in a few seconds', 'Fechar', {
-          duration: 2000,
-        });*/
       }
     });
   }

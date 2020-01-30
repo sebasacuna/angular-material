@@ -10,8 +10,8 @@ import {PortalModule} from '@angular/cdk/portal';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 
 import {MatInputModule} from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
+import {MatButtonModule} from '@angular/material/button';
+import {MatDialogModule} from '@angular/material/dialog';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {
   MatCheckboxModule,
@@ -19,9 +19,14 @@ import {
   MatIconModule,
   MatListModule,
   MatMenuModule,
-  MatPaginatorModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MatToolbarModule, MatTooltipModule
+  MatPaginatorModule,
+  MatSelectModule,
+  MatSnackBarModule,
+  MatSortModule,
+  MatTableModule,
+  MatToolbarModule,
+  MatTooltipModule
 } from '@angular/material';
-
 
 
 @NgModule({

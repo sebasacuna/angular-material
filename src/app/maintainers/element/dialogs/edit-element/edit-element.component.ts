@@ -3,6 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {NewElementComponent} from '../new-element/new-element.component';
 import {PeriodicElement} from '../../models/element.model';
+import {NGXLogger} from 'ngx-logger';
 
 @Component({
   selector: 'app-edit-element',
@@ -19,13 +20,14 @@ export class EditElementComponent implements OnInit {
 
   public formedit: FormGroup;
 
-  constructor(@Inject(MAT_DIALOG_DATA) private data: any,
+  constructor(private logger: NGXLogger,
+              @Inject(MAT_DIALOG_DATA) private data: any,
               public fb: FormBuilder,
               private dialogRef: MatDialogRef<NewElementComponent>) {
     if (data) {
       this.title = 'Elemento';
       this.index = data.indexRow;
-      console.log('index is ', this.index);
+      this.logger.info('index is ', this.index);
     }
     this.data2 = data;
     this.createForm(data.data);
@@ -33,7 +35,7 @@ export class EditElementComponent implements OnInit {
   }
 
   createForm(data) {
-    console.log(data);
+    this.logger.info(this.createForm.name + ' ', data);
     this.formedit = this.fb.group({
       number: new FormControl({
         value: data.number,
@@ -46,8 +48,7 @@ export class EditElementComponent implements OnInit {
   }
 
   editElement() {
-    console.log('edit element');
-    console.log(this.formedit.value.number);
+    this.logger.info(this.editElement.name + ' ' + this.formedit.value.number);
     const bar: PeriodicElement = {
       number: this.formedit.controls['number'].value,
       name: this.formedit.value.name,

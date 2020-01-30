@@ -11,14 +11,16 @@ import {FooterComponent} from './shared/footer/footer.component';
 import {MaterialModule} from './modules/material/material.module';
 import {ConfirmationDialogComponent} from './maintainers/element/dialogs/confirmation-dialog/confirmation-dialog.component';
 import {AlertDialogComponent} from './maintainers/element/dialogs/alertdialog/alertdialog.component';
-import { NewElementComponent } from './maintainers/element/dialogs/new-element/new-element.component';
+import {NewElementComponent} from './maintainers/element/dialogs/new-element/new-element.component';
 import {ReactiveFormsModule} from '@angular/forms';
-import { EditElementComponent } from './maintainers/element/dialogs/edit-element/edit-element.component';
+import {EditElementComponent} from './maintainers/element/dialogs/edit-element/edit-element.component';
 import {ElementMantainerComponent} from './maintainers/element/components/element/elemenmantainer.component';
 
-import { HttpClientModule } from '@angular/common/http';
+import {HttpClientModule} from '@angular/common/http';
 
 import {IConfig, NgxMaskModule} from 'ngx-mask';
+import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
+import {environment} from '../environments/environment';
 
 export let options: Partial<IConfig> | (() => Partial<IConfig>);
 
@@ -40,7 +42,14 @@ export let options: Partial<IConfig> | (() => Partial<IConfig>);
     MaterialModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgxMaskModule.forRoot(options)
+    NgxMaskModule.forRoot(options),
+    LoggerModule.forRoot({
+      serverLoggingUrl: '/api/logs',
+      level: NgxLoggerLevel.TRACE,
+      serverLogLevel: NgxLoggerLevel.ERROR,
+      enableSourceMaps: true,
+      disableConsoleLogging: !environment.dev
+    })
   ],
   providers: [],
   bootstrap: [AppComponent],

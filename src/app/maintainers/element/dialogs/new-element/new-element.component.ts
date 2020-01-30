@@ -2,6 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {PeriodicElement} from '../../models/element.model';
+import {NGXLogger} from 'ngx-logger';
 
 @Component({
   selector: 'app-new-element',
@@ -15,10 +16,10 @@ export class NewElementComponent implements OnInit {
 
   public form: FormGroup;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+  constructor(private logger: NGXLogger,
+              @Inject(MAT_DIALOG_DATA) public data: any,
               public fb: FormBuilder,
               private dialogRef: MatDialogRef<NewElementComponent>) {
-    console.log(data);
     if (data) {
       this.title = 'Elemento';
     }
@@ -42,7 +43,7 @@ export class NewElementComponent implements OnInit {
   }
 
   close() {
-    console.log('close');
+    this.logger.info('close');
     const response = {
       data: null,
       response: false,
@@ -51,9 +52,9 @@ export class NewElementComponent implements OnInit {
   }
 
   addNewElement() {
-    console.log('add element');
-    console.log(this.form);
-    console.log(this.data.datasource.data);
+    this.logger.info('add element');
+    this.logger.info(this.addNewElement.name + ' ', this.form);
+    this.logger.info(this.addNewElement.name + ' ', this.data.datasource.data);
     const bar: PeriodicElement = {
       number: this.form.value.number,
       name: this.form.value.name,

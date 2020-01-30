@@ -48,8 +48,6 @@ export class ElementService {
   }
 
   deleteElement(numberId) {
-    console.log('delete Element');
-    console.log(numberId);
     return this.http.delete(this.baseUrl + '/element', {params: {id: numberId.id}});
   }
 
