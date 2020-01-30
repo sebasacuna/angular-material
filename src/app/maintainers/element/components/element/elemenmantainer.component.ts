@@ -11,7 +11,7 @@ import {NewElementComponent} from '../../dialogs/new-element/new-element.compone
 import {EditElementComponent} from '../../dialogs/edit-element/edit-element.component';
 import {PeriodicElement} from '../../models/element.model';
 import {ElementService} from '../../services/element.service';
-import {Observable} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {concatMap, tap} from 'rxjs/operators';
 import {NGXLogger} from 'ngx-logger';
 
@@ -23,13 +23,16 @@ import {NGXLogger} from 'ngx-logger';
 })
 export class ElementMantainerComponent implements OnInit, OnDestroy {
 
+
+  private subscription: Subscription = new Subscription();
+
   constructor(private logger: NGXLogger,
               private dialog: MatDialog,
               private snackBar: MatSnackBar,
               private elementService: ElementService,
               private changeDetectorRefs: ChangeDetectorRef) {
 
-    this.elementService.getCountElements().pipe(
+    this.subscription.add(this.elementService.getCountElements().pipe(
       concatMap(result => {
         this.length = result;
         this.pageIndex = 0;
@@ -41,7 +44,7 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
         this.dataSource = new MatTableDataSource<PeriodicElement>(response);
       }, err => {
         this.logger.error(err);
-      });
+      }));
 
   }
 
@@ -67,11 +70,11 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
     this.logger.info(`${this.getServerData.name} `, event);
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
-    this.elementService.getElementsPagination(event.pageSize, event.pageIndex).subscribe(response => {
+    this.subscription.add(this.elementService.getElementsPagination(event.pageSize, event.pageIndex).subscribe(response => {
       this.dataSource = new MatTableDataSource<PeriodicElement>(response);
     }, err => {
       this.logger.error(this.getServerData.name + ' ', err);
-    });
+    }));
   }
 
   isAllSelected() {
@@ -118,7 +121,7 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((bar) => {
       if (bar.response) {
 
-        this.elementService.updateElements(bar.data)
+        this.subscription.add(this.elementService.updateElements(bar.data)
           .pipe(
             tap(
               response => {
@@ -138,7 +141,7 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
           }, err => {
             this.logger.error(this.edit.name + ' ', err);
           }
-        );
+        ));
 
         const a = document.createElement('a');
         a.click();
@@ -163,7 +166,7 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((bar) => {
       if (bar.response) {
-        this.elementService.createElements(bar.data)
+        this.subscription.add(this.elementService.createElements(bar.data)
           .pipe(
             tap(
               response => {
@@ -188,7 +191,7 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
                 this.logger.error(this.openDialogNewElement.name + ' ', err);
               }
             )
-          ).subscribe(res => this.logger.info('Latest result', res));
+          ).subscribe(res => this.logger.info('Latest result', res)));
 
         this.refreshTable();
 
@@ -218,7 +221,7 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
 
-        this.elementService.deleteElement({id: element.number}).pipe(
+        this.subscription.add(this.elementService.deleteElement({id: element.number}).pipe(
           concatMap(result => {
             if (result) {
               const filteredItems = this.dataSource.data.filter(item => item !== element);
@@ -231,7 +234,7 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
             this.length = response;
           }, err => {
             this.logger.error(this.delete.name + ' ', err);
-          });
+          }));
 
         const a = document.createElement('a');
         a.click();
@@ -254,10 +257,6 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
     });
   }
 
-  public ngOnDestroy(): void {
-
-  }
-
   private refreshTable() {
     // Refreshing table using paginator
     // Thanks yeager-j for tips
@@ -265,10 +264,14 @@ export class ElementMantainerComponent implements OnInit, OnDestroy {
     this.paginator._changePageSize(this.paginator.pageSize);
   }
 
-
   getTotalRows() {
     if (!this.dataSource === undefined) {
       return this.dataSource.data.length;
     }
   }
+
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
 }
